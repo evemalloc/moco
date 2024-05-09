@@ -10,9 +10,11 @@ import com.google.common.base.Objects;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Base64;
 
 import static com.google.common.io.ByteStreams.toByteArray;
 
@@ -94,6 +96,21 @@ public class MessageContent {
             } catch (IOException e) {
                 throw new MocoException(e);
             }
+        }
+
+        public final Builder withContentBase64Decode(final InputStream is) {
+            withContent(is);
+            String strContent = new String(this.content);
+            try {
+                strContent = URLDecoder.decode(strContent, "utf-8");
+                this.content= Base64.getDecoder().decode(strContent);
+                return this;
+
+            } catch (Exception e) {
+                throw new MocoException(e);
+            }
+
+
         }
 
         public final Builder withContent(final ByteBuffer byteBuffer) {
