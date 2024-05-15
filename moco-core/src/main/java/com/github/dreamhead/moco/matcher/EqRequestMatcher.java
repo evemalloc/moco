@@ -7,7 +7,24 @@ import com.github.dreamhead.moco.resource.Resource;
 
 public final class EqRequestMatcher<T> extends AbstractOperatorMatcher<T> {
     public EqRequestMatcher(final RequestExtractor<T> extractor, final Resource expected) {
-        super(extractor, expected, input -> input.equals(expected.readFor((Request) null).toString()));
+        super(extractor, expected, input -> {
+                    System.out.println("input is ::::" + input);
+                    boolean result = false;
+                    String expectedStr = expected.readFor((Request) null).toString();
+                    String[] tempStringArray = expectedStr.split("#@#");
+
+                    System.out.println("expectedStr is ::::" + expectedStr);
+
+                    for (String tmpString : tempStringArray) {
+
+                        result = result || (input.equals(tmpString));
+                    }
+
+                    return result;
+                }
+
+
+        );
     }
 
     @Override

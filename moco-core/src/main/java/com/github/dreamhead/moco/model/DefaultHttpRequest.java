@@ -121,14 +121,6 @@ public final class DefaultHttpRequest extends DefaultHttpMessage implements Http
         if (contentLength <= 0) {
             return content().build();
         }
-        String uri = request.uri();
-
-        if (uri.endsWith("base64")) {
-            return content()
-                    .withCharset(HttpUtil.getCharset(request))
-                    .withContentBase64Decode(new ByteBufInputStream(request.content()))
-                    .build();
-        }
 
         return content()
                 .withCharset(HttpUtil.getCharset(request))

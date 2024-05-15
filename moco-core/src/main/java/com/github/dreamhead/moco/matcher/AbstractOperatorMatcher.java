@@ -6,6 +6,7 @@ import com.github.dreamhead.moco.RequestExtractor;
 import com.github.dreamhead.moco.RequestMatcher;
 import com.github.dreamhead.moco.model.MessageContent;
 import com.github.dreamhead.moco.resource.Resource;
+import com.github.dreamhead.moco.util.Base64Utils;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -38,18 +39,22 @@ public abstract class AbstractOperatorMatcher<T> extends AbstractRequestMatcher 
     }
 
     private boolean matchContent(final T target) {
+
         if (target instanceof String) {
             return predicate.test((String) target);
         }
 
         if (target instanceof String[]) {
             String[] contents = (String[]) target;
+
             return Arrays.stream(contents).filter(Objects::nonNull).anyMatch(predicate);
         }
 
         if (target instanceof MessageContent) {
             MessageContent actualTarget = (MessageContent) target;
-            return predicate.test(actualTarget.toString());
+            String tempStr=Base64Utils.decodeIfIsBase64String(actualTarget.toString());
+
+            return predicate.test(tempStr);
         }
 
         return false;

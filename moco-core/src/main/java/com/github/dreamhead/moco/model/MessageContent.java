@@ -98,20 +98,7 @@ public class MessageContent {
             }
         }
 
-        public final Builder withContentBase64Decode(final InputStream is) {
-            withContent(is);
-            String strContent = new String(this.content);
-            try {
-                strContent = URLDecoder.decode(strContent, "utf-8");
-                this.content= Base64.getDecoder().decode(strContent);
-                return this;
 
-            } catch (Exception e) {
-                throw new MocoException(e);
-            }
-
-
-        }
 
         public final Builder withContent(final ByteBuffer byteBuffer) {
             this.content = byteBuffer.array();
